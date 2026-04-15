@@ -4,6 +4,7 @@
 
 [sub_resource type="GDScript" id="GDScript_is5to"]
 script/source = "extends RigidBody2D
+
 "
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_nmvue"]
@@ -18,7 +19,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_f7dp0"]
-size = Vector2(130, 130)
+size = Vector2(120, 120)
 
 [node name="playerCharacter" type="RigidBody2D"]
 script = SubResource("GDScript_is5to")
