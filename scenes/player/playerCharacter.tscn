@@ -1,10 +1,6 @@
-[gd_scene load_steps=5 format=3 uid="uid://vpxqdtw7fvcq"]
+[gd_scene load_steps=4 format=3 uid="uid://vpxqdtw7fvcq"]
 
 [ext_resource type="Texture2D" uid="uid://bg3ctyu2xrdl0" path="res://icon.svg" id="1_is5to"]
-
-[sub_resource type="GDScript" id="GDScript_is5to"]
-script/source = "extends RigidBody2D
-"
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_nmvue"]
 animations = [{
@@ -20,11 +16,12 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_f7dp0"]
 size = Vector2(130, 130)
 
-[node name="playerCharacter" type="RigidBody2D"]
-script = SubResource("GDScript_is5to")
+[node name="playerCharacter" type="RigidBody2D" groups=["player"]]
+contact_monitor = true
+max_contacts_reported = 1
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." groups=["player"]]
 sprite_frames = SubResource("SpriteFrames_nmvue")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." groups=["player"]]
 shape = SubResource("RectangleShape2D_f7dp0")
