@@ -14,13 +14,14 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_f7dp0"]
-size = Vector2(130, 130)
+size = Vector2(100, 100)
 
 [node name="playerCharacter" type="RigidBody2D" groups=["player"]]
 contact_monitor = true
 max_contacts_reported = 1
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." groups=["player"]]
+scale = Vector2(0.8125, 0.8125)
 sprite_frames = SubResource("SpriteFrames_nmvue")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." groups=["player"]]

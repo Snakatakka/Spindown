@@ -1,23 +1,23 @@
 extends RigidBody2D
 
-const speed: float = 200.0
+const speed: float = 2.0
+
+@export var gravityFlow: String = "Down"
 var gravity: Vector2 = Vector2(0, 6.4 * gravityMultiplier)
 var gravityMultiplier: float = 200.0
 var isOnFloor: bool = false
-
-
-
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	pass # Replace with function body.
+var canFlipGravity: bool = true
+var gravityVertical: bool = false
+var gravityHorizontal: bool = false
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	# apply gravity every frame
-	apply_central_force(gravity)
+	position.x = round(position.x/speed) * speed
+	position.y = round(position.y/speed) * speed
 	
-	# if we're on the floor, the gravity is lessened in order to allow the player to actually be able to move
-	# if we're floating through the air, the gravity is increased so that you don't fall like a balloon
+	# apply gravity every frame
+	if !((Input.is_action_just_pressed("Left") or Input.is_action_just_pressed("Right")) and isOnFloor):
+		apply_central_force(gravity)
 	
 	# softlock prevention
 	# also it makes debugging easier lol
@@ -25,38 +25,58 @@ func _process(delta: float) -> void:
 		get_tree().reload_current_scene()
 	
 	# handle basic gravity flipping
-	if Input.is_action_just_pressed("ui_down"):
-		gravity = Vector2(0, 3.6 * gravityMultiplier)
-		isOnFloor = false
-		rotation = 0.0
-		print("Gravity Switched!")
-	elif Input.is_action_just_pressed("ui_up"):
-		gravity = Vector2(0, -3.6 * gravityMultiplier)
-		isOnFloor = false
-		rotation = 180.0
-		print("Gravity Switched!")
-	elif Input.is_action_just_pressed("ui_left"):
-		gravity = Vector2(-6.4 * gravityMultiplier, 0)
-		isOnFloor = false
-		rotation = 90.0
-		print("Gravity Switched!")
-	elif Input.is_action_just_pressed("ui_right"):
-		gravity = Vector2(6.4 * gravityMultiplier, 0)
-		isOnFloor = false
-		rotation = 270.0
-		print("Gravity Switched!")
-	
+	if canFlipGravity:
+		if Input.is_action_just_pressed("ui_down"):
+			gravity = Vector2(0, 3.6 * gravityMultiplier)
+			isOnFloor = false
+			canFlipGravity = false
+			print("Gravity Switched!")
+		elif Input.is_action_just_pressed("ui_up"):
+			gravity = Vector2(0, -3.6 * gravityMultiplier)
+			isOnFloor = false
+			canFlipGravity = false
+			print("Gravity Switched!")
+		elif Input.is_action_just_pressed("ui_left"):
+			gravity = Vector2(-6.4 * gravityMultiplier, 0)
+			isOnFloor = false
+			canFlipGravity = false
+			print("Gravity Switched!")
+		elif Input.is_action_just_pressed("ui_right"):
+			gravity = Vector2(6.4 * gravityMultiplier, 0)
+			isOnFloor = false
+			canFlipGravity = false
+			print("Gravity Switched!")
+
 	# handle movement
-	var direction := Input.get_axis("Left", "Right")
-	if !isOnFloor:
-		if direction:
-			apply_central_force(Vector2(direction * speed, 0))
-			print(direction)
+	if Input.is_action_pressed("Left") and isOnFloor:
+		match gravityFlow:
+			"Down":
+				global_position.x -= speed
+			"Up": 
+				global_position.x += speed
+			"Left":
+				global_position.y += speed
+			"Right":
+				global_position.y -= speed
+
+	if Input.is_action_pressed("Right") and isOnFloor:
+		match gravityFlow:
+			"Down":
+				global_position.x += speed
+			"Up": 
+				global_position.x -= speed
+			"Left":
+				global_position.y -= speed
+			"Right":
+				global_position.y += speed
 
 # detects whether or not we're on the floor
 func onBodyEntered(body: Node) -> void:
 	if body.is_in_group("floor"):
 		isOnFloor = true
+		canFlipGravity = true
+		gravityVertical = false
+		gravityHorizontal = false
 		print("On the floor!")
 
 func onBodyExited(body: Node) -> void:
