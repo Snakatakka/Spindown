@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://vpxqdtw7fvcq"]
 
-[ext_resource type="Texture2D" uid="uid://bg3ctyu2xrdl0" path="res://icon.svg" id="1_is5to"]
+[ext_resource type="Texture2D" uid="uid://o1uucgy4hu8t" path="res://assets/sprites/player/playerSprite.png" id="1_is5to"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_nmvue"]
 animations = [{
@@ -14,7 +14,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_f7dp0"]
-size = Vector2(100, 100)
+size = Vector2(40, 40)
 
 [node name="playerCharacter" type="RigidBody2D" groups=["player"]]
 contact_monitor = true
